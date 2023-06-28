@@ -1,0 +1,9 @@
+apiVersion: v2
+name: prometheus-ping
+description: Measure ping between locations and report it as Prometheus metrics
+
+type: application
+
+version: 0.1.0
+
+appVersion: "0.1.0"
