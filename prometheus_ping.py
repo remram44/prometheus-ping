@@ -86,7 +86,7 @@ def main():
     # Create ping thread
     ping_thread = threading.Thread(
         target=ping,
-        args=[sock, targets, collector.send_counters],
+        args=[sock, targets, collector],
         name="Ping sender",
         daemon=True,
     )
@@ -106,12 +106,12 @@ def server(listen_port):
         sock.sendto(data, addr)
 
 
-def ping(sock, targets, send_counters):
+def ping(sock, targets, collector):
     while True:
         time.sleep(1)
         for (addr, target) in targets.items():
             sock.sendto(current_time(), addr)
-            send_counters[target] += 1
+            collector.send_counters[target] += 1
 
 
 class Collector(object):
