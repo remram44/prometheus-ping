@@ -112,6 +112,7 @@ def ping(sock, targets, collector):
         for (addr, target) in targets.items():
             sock.sendto(current_time(), addr)
             collector.send_counters[target] += 1
+            collector.in_flight[target] = 1
 
 
 class Collector(object):
@@ -120,7 +121,7 @@ class Collector(object):
         self.send_counters = {target: 0 for target in targets.values()}
         self.recv_counters = {target: 0 for target in targets.values()}
         self.latencies = {target: [] for target in targets.values()}
-        self.last_reply = {target: 0 for target in targets.values()}
+        self.in_flight = {target: 0 for target in targets.values()}
 
     def collect(self):
         now = time.perf_counter()
@@ -137,8 +138,7 @@ class Collector(object):
         for target, sent in self.send_counters.items():
             received = self.recv_counters[target]
             loss = sent - received
-            if now - self.last_reply[target] > 1.0:
-                loss -= 1
+            loss - self.in_flight[target]
             m_packet_loss.add_metric([self.source, target], loss)
 
         m_latency_avg = prometheus_client.metrics_core.GaugeMetricFamily(
@@ -165,7 +165,7 @@ def receive(sock, targets, collector):
         except KeyError:
             continue
         collector.recv_counters[target] += 1
-        collector.last_reply[target] = time.perf_counter()
+        collector.in_flight[target] = 0
         delay = get_delay(data)
         latencies = collector.latencies[target]
         latencies.append(delay)
