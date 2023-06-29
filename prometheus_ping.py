@@ -124,8 +124,6 @@ class Collector(object):
         self.in_flight = {target: 0 for target in targets.values()}
 
     def collect(self):
-        now = time.perf_counter()
-
         m_packet_loss = prometheus_client.metrics_core.CounterMetricFamily(
             'ping_packet_loss', "Lost packets",
             labels=['source', 'target'],
