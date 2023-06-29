@@ -138,7 +138,7 @@ class Collector(object):
         for target, sent in self.send_counters.items():
             received = self.recv_counters[target]
             loss = sent - received
-            loss - self.in_flight[target]
+            loss -= self.in_flight[target]
             m_packet_loss.add_metric([self.source, target], loss)
 
         m_latency_avg = prometheus_client.metrics_core.GaugeMetricFamily(
