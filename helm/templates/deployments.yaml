@@ -58,6 +58,12 @@ spec:
             - name: metrics
               containerPort: 8000
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
           lifecycle:
             preStop:
               exec:
