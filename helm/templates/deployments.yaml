@@ -58,6 +58,10 @@ spec:
             - name: metrics
               containerPort: 8000
               protocol: TCP
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sleep", "2"]
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       nodeSelector:
