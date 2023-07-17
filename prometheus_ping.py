@@ -49,7 +49,10 @@ def parse_target(target):
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
 
     parser = argparse.ArgumentParser(
         'prometheus_ping',
