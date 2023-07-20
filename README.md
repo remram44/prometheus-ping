@@ -26,7 +26,9 @@ ping_latency_average_30s{source="database:5555",target="spire:5000"} 0.00130
 If you have 3 zones `alpha`, `bravo`, and `charlie`, you can deploy like this:
 
 ```
-helm install prometheus-ping helm/ --namespace default \
+helm install prometheus-ping \
+    oci://ghcr.io/remram44/prometheus-ping/helm-charts/prometheus-ping \
+    --namespace default \
     --set-json 'locations.alpha={"topology.kubernetes.io/zone": "alpha"}' \
     --set-json 'locations.bravo={"topology.kubernetes.io/zone": "bravo"}' \
     --set-json 'locations.charlie={"topology.kubernetes.io/zone": "charlie"}'
