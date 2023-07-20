@@ -16,6 +16,18 @@ logger = logging.getLogger('prometheus_ping')
 SAMPLES = 30
 
 
+def average(iterable):
+    total = 0
+    count = 0
+    for value in iterable:
+        total += value
+        count += 1
+    if count > 0:
+        return total / count
+    else:
+        return None
+
+
 def current_time():
     """Return perf_counter_ns() as a 64-bit binary buffer.
     """
@@ -123,6 +135,8 @@ class Collector(object):
         self.in_flight = {target: 0 for target in targets.values()}
 
     def collect(self):
+        now = time.time()
+
         m_packet_loss = prometheus_client.metrics_core.CounterMetricFamily(
             'ping_packet_loss', "Lost packets",
             labels=['source', 'target'],
@@ -145,8 +159,14 @@ class Collector(object):
 
         for target, latencies in self.latencies.items():
             if latencies:
-                latency = sum(latencies) / len(latencies) / 1e9
-                m_latency_avg.add_metric([self.source, target], latency)
+                # Average of the latency measurements in the last 30 seconds
+                latency = average(
+                    lat
+                    for when, lat in latencies
+                    if when > now - SAMPLES
+                ) / 1e9
+                if latency is not None:
+                    m_latency_avg.add_metric([self.source, target], latency)
 
         return [
             m_packet_loss,
@@ -165,7 +185,7 @@ def receive(sock, targets, collector):
         collector.in_flight[target] = 0
         delay = get_delay(data)
         latencies = collector.latencies[target]
-        latencies.append(delay)
+        latencies.append((time.time(), delay))
         if len(latencies) > SAMPLES:
             latencies[:] = latencies[-SAMPLES:]
 
