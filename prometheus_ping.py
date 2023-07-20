@@ -65,9 +65,12 @@ def main():
         logger.info("  no targets")
 
     # Create echo server (for others to ping)
+    logger.info("Starting UDP echo server on port %d", args.listen_port)
+    echo_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    echo_sock.bind(('0.0.0.0', args.listen_port))
     server_thread = threading.Thread(
         target=server,
-        args=[args.listen_port],
+        args=[echo_sock],
         name="UDP echo server",
         daemon=True,
     )
@@ -96,11 +99,7 @@ def main():
     receive(sock, targets, collector)
 
 
-def server(listen_port):
-    logger.info("Starting UDP echo server on port %d", listen_port)
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind(('0.0.0.0', listen_port))
-
+def server(sock):
     while True:
         data, addr = sock.recvfrom(1024)
         sock.sendto(data, addr)
