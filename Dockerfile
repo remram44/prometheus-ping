@@ -14,6 +14,10 @@ RUN /root/.local/bin/poetry export -o requirements.txt
 
 FROM python:3.10
 
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
 # Install requirements
 COPY --from=deps /usr/src/app/requirements.txt /requirements.txt
 RUN pip --disable-pip-version-check install --no-cache-dir -r /requirements.txt
@@ -31,4 +35,4 @@ RUN mkdir -p /usr/src/app/home && \
 ENV PYTHONFAULTHANDLER=1
 
 USER 998
-ENTRYPOINT ["python3", "prometheus_ping.py"]
+ENTRYPOINT ["/tini", "--", "python3", "prometheus_ping.py"]
