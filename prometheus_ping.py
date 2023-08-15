@@ -167,9 +167,12 @@ class Collector(object):
                     lat
                     for when, lat in latencies
                     if when > now - SAMPLES
-                ) / 1e9
+                )
                 if latency is not None:
-                    m_latency_avg.add_metric([self.source, target], latency)
+                    m_latency_avg.add_metric(
+                        [self.source, target],
+                        latency / 1e9,
+                    )
 
         return [
             m_packet_loss,
