@@ -4,6 +4,6 @@ description: Measure ping between locations and report it as Prometheus metrics
 
 type: application
 
-version: 0.1.1
+version: 0.1.2
 
-appVersion: "0.1.1"
+appVersion: "0.1.2"
