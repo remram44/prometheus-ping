@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prometheus-ping"
-version = "0.1.2"
+version = "0.1.3"
 description = "Measure ping between locations and report it as Prometheus metrics"
 authors = ["Remi Rampin <remi@rampin.org>"]
 license = "MIT"

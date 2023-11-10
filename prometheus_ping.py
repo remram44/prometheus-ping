@@ -7,7 +7,7 @@ import threading
 import time
 
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 
 logger = logging.getLogger('prometheus_ping')
