@@ -8,7 +8,7 @@ metadata:
   name: {{ include "prometheus-ping.fullname" . }}-{{ $location }}
   labels:
     {{- include "prometheus-ping.labels" . | nindent 4 }}
-    location: {{ $location }}
+    location: {{ $location | quote }}
 spec:
   type: ClusterIP
   ports:
@@ -18,6 +18,6 @@ spec:
       name: ping
   selector:
     {{- include "prometheus-ping.selectorLabels" . | nindent 4 }}
-    location: {{ $location }}
+    location: {{ $location | quote }}
 {{- end }}
 {{- end }}

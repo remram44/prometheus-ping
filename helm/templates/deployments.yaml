@@ -8,7 +8,7 @@ metadata:
   name: {{ include "prometheus-ping.fullname" . }}-{{ $location }}
   labels:
     {{- include "prometheus-ping.labels" . | nindent 4 }}
-    location: {{ $location }}
+    location: {{ $location | quote }}
 spec:
   replicas: 1
   strategy:
@@ -19,7 +19,7 @@ spec:
   selector:
     matchLabels:
       {{- include "prometheus-ping.selectorLabels" . | nindent 6 }}
-      location: {{ $location }}
+      location: {{ $location | quote }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -28,7 +28,7 @@ spec:
       {{- end }}
       labels:
         {{- include "prometheus-ping.selectorLabels" . | nindent 8 }}
-        location: {{ $location }}
+        location: {{ $location | quote }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
