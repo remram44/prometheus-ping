@@ -1,0 +1,11 @@
+[package]
+name = "prometheus_ping"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+byteorder = "*"
+clap = "2"
+hyper = { version = "0.14", features = ["server", "http1", "tcp"] }
+prometheus = "*"
+tokio = { version = "*", features = ["rt"] }
