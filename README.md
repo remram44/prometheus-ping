@@ -8,8 +8,9 @@ Each instance is given a **source name** (reported in the metrics), a **UDP port
 For example:
 
 ```
-python prometheus_ping.py --source spire:5000 --listen-port 5000 database:5555
-python prometheus_ping.py --source database:5555 --listen-port 5555 spire:5000
+cargo build --release
+target/release/prometheus_ping --source spire:5000 --listen-port 5000 database:5555
+target/release/prometheus_ping --source database:5555 --listen-port 5555 spire:5000
 ```
 
 The resulting metrics look like:
