@@ -95,7 +95,7 @@ def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind(('0.0.0.0', 0))
 
-    # Setup Prometheus expositing
+    # Setup Prometheus exposition
     collector = Collector(args.source, targets)
     prometheus_client.REGISTRY.register(collector)
     logger.info("Starting Prometheus server on port %d", args.metrics_port)
@@ -187,9 +187,9 @@ def receive(sock, targets, collector):
             target = targets[addr]
         except KeyError:
             continue
+        delay = get_delay(data)
         collector.recv_counters[target] += 1
         collector.in_flight[target] = 0
-        delay = get_delay(data)
         latencies = collector.latencies[target]
         latencies.append((time.time(), delay))
         if len(latencies) > SAMPLES:
