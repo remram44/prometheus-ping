@@ -264,7 +264,7 @@ impl PingCollector {
         }
         let desc = &[
             TempDesc::new(
-                "ping_packet_loss",
+                "ping_packet_loss_total",
                 "Lost packets",
                 &["source", "target"],
             ),
@@ -302,7 +302,7 @@ impl Collector for PingCollector {
         let targets_info = &*self.targets_info.lock().unwrap();
 
         let packet_loss = prometheus::IntCounterVec::new(
-            prometheus::Opts::new("ping_packet_loss", "Lost packets"),
+            prometheus::Opts::new("ping_packet_loss_total", "Lost packets"),
             &["source", "target"],
         ).unwrap();
 
