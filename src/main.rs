@@ -98,8 +98,8 @@ fn main() {
                         exit(1);
                     }
                 }
-                Err(_) => {
-                    eprintln!("Invalid target {}", target);
+                Err(e) => {
+                    eprintln!("Invalid target {}: {}", target, e);
                     exit(1);
                 }
             };
