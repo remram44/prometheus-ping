@@ -1,0 +1,26 @@
+.git
+
+/helm
+/scripts
+
+# Python
+**/*.pyc
+**/*.pyo
+**/.ipynb_checkpoints
+
+# ViM
+**/.*.swp
+
+# Emacs
+**/#*#
+
+# OS files
+**/.DS_Store
+**/desktop.ini
+
+# Archives
+**/*.tar
+**/*.tar.gz
+**/*.tar.bz2
+**/*.zip
+**/*.whl
