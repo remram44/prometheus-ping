@@ -7,12 +7,22 @@ WORKDIR /usr/src/app
 RUN cargo build --release
 
 
+FROM --platform=$BUILDPLATFORM rust:1.75-bookworm AS tini-getter
+
+ARG TARGETPLATFORM
+
+ENV TINI_VERSION v0.19.0
+RUN if [ ${TARGETPLATFORM} = "linux/amd64" ]; then TINI_NAME=tini-amd64; \
+    elif [ ${TARGETPLATFORM} = "linux/arm64" ]; then TINI_NAME=tini-arm64; \
+    else echo "no tini URL for ${TARGETPLATFORM}"; exit 1; fi && \
+    curl -sSLfo /tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/${TINI_NAME} && \
+    chmod +x /tini
+
+
 FROM debian:bookworm-slim
 
 # Install tini
-ENV TINI_VERSION v0.19.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+COPY --from=tini-getter /tini /tini
 
 # Copy app
 COPY --from=builder /usr/src/app/target/release/prometheus_ping /usr/local/bin/prometheus_ping
