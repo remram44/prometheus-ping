@@ -22,6 +22,8 @@ ping_latency_average_30s{source="spire:5000",target="database:5555"} 0.00123
 ping_latency_average_30s{source="database:5555",target="spire:5000"} 0.00130
 ```
 
+![Screenshot of a Grafana dashboard](grafana-screenshot.png)
+
 ## Deploying with Helm
 
 If you have 3 zones `alpha`, `bravo`, and `charlie`, you can deploy like this:
